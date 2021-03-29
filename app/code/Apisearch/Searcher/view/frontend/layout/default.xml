@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceBlock name="top.search">
+            <action method="setTemplate">
+                <argument name="template" xsi:type="string">Apisearch_Searcher::form.mini.phtml</argument>
+            </action>
+        </referenceBlock>
+        <referenceContainer name="before.body.end">
+            <block class="Apisearch\Searcher\Block\Integration" name="Apisearch.integration" ifconfig="searcher/general/enable" />
+        </referenceContainer>
+    </body>
+</page>

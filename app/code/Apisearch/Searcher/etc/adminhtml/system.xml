@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="apisearch" translate="label" sortOrder="10">
+            <label>Apisearch</label>
+        </tab>
+        <section id="searcher" translate="label" sortOrder="130" showInDefault="1" showInWebsite="1" showInStore="1">
+            <class>separator-top</class>
+            <label>Configuration</label>
+            <tab>apisearch</tab>
+            <resource>Apisearch_Searcher::searcher_config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General Configuration</label>
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Module Enable</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="appUUID" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>appUUID</label>
+                </field>
+                <field id="index_id" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>indexUUID</label>
+                </field>
+                <field id="tokenUUID" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>tokenUUID</label>
+                </field>
+                <field id="real_time" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Real time index</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>All the attributes configuration will be used to create the feed that will be sent to Apisearch, then we will have to configure these attributes in the Apisearch panel.</comment>
+                </field>
+                <field id="reindex_button" translate="label comment" type="button" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <frontend_model>Apisearch\Searcher\Block\Adminhtml\Settings\ReindexData</frontend_model>
+                    <comment>This process may take a few minutes</comment>
+                </field>
+            </group>
+            <group id="feed_configuration" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Feed configuration</label>
+                <field id="listting_attributes" translate="Listting attributes" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Listting attributes</label>
+                    <frontend_model>Apisearch\Searcher\Block\Adminhtml\Form\Field\ConfigAttributes</frontend_model>
+                    <backend_model>Apisearch\Searcher\Model\Config\Backend\Serialized</backend_model>
+                    <comment>Attributes required for the listing.</comment>
+                </field>
+                <field id="filterable_attributes" translate="Filterable attributes" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Filterable attributes</label>
+                    <frontend_model>Apisearch\Searcher\Block\Adminhtml\Form\Field\ConfigAttributes</frontend_model>
+                    <backend_model>Apisearch\Searcher\Model\Config\Backend\Serialized</backend_model>
+                    <comment>Filter attributes, such as: Color, Size, Brand, etc. There cannot be repeated attributes to those of 'Listting attributes'.</comment>
+                </field>
+                <field id="searchable_attributes" translate="Searchable attributes" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Searchable attributes</label>
+                    <frontend_model>Apisearch\Searcher\Block\Adminhtml\Form\Field\ConfigAttributes</frontend_model>
+                    <backend_model>Apisearch\Searcher\Model\Config\Backend\Serialized</backend_model>
+                    <comment>Attributes for which we will search</comment>
+                </field>
+                <field id="exact_matching_metadata" translate="Exact matching attributes" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Exact matching attributes</label>
+                    <frontend_model>Apisearch\Searcher\Block\Adminhtml\Form\Field\ConfigAttributes</frontend_model>
+                    <backend_model>Apisearch\Searcher\Model\Config\Backend\Serialized</backend_model>
+                    <comment>Attributes for which we will search for an exact match</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

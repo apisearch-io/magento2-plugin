@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Indexer/etc/indexer.xsd">
+    <indexer id="apisearch_feed_indexer" view_id="apisearch_feed_indexer" class="Apisearch\Searcher\Model\Indexer\Feed">
+        <title translate="true">Apisearch Feed Indexer</title>
+        <description translate="true">Apisearch Feed Indexer</description>
+    </indexer>
+</config>
