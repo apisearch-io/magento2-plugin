@@ -4,7 +4,6 @@ namespace Apisearch\Searcher\Model;
 
 use Apisearch\Searcher\Helper\Data;
 use Apisearch\Searcher\Helper\ApisearchClient;
-use Magento\Catalog\Model\Layer\Category\FilterableAttributeList;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Catalog\Model\Product;
@@ -14,22 +13,17 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Swatches\Helper\Data as SwatchesHelper;
 use Magento\CatalogInventory\Model\Stock\StockItemRepository;
 use Magento\Catalog\Model\ProductRepository;
-use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryFactory;
 
 class Connection extends ApisearchClient {
 
     private $_logger;
-    protected $host = 'https://pre.apisearch.io';
+    protected $host = 'https://eu1.apisearch.cloud';
     protected $version = 'v1';
     /**
      * @var Data
      */
     private $_dataHelper;
-    /**
-     * @var FilterableAttributeList
-     */
-    private $_filterableProducts;
     /**
      * @var StoreManagerInterface
      */
@@ -61,7 +55,6 @@ class Connection extends ApisearchClient {
 
     public function __construct(
         Data $data,
-        FilterableAttributeList $filterableProdcuts,
         StoreManagerInterface $storeManager,
         CollectionFactory $collectionFactory,
         ReviewFactory $reviewFactory,
@@ -72,7 +65,6 @@ class Connection extends ApisearchClient {
     )
     {
         $this->_dataHelper = $data;
-        $this->_filterableProducts = $filterableProdcuts;
         $this->_storeManager = $storeManager;
         $this->_logger = $this->_dataHelper->logger();
         $this->_collectionFactory = $collectionFactory;
@@ -114,14 +106,17 @@ class Connection extends ApisearchClient {
 
     public function getCategoriesData($ids)
     {
+        $cat = array();
         $categories = $this->_categoryFactory->create()
             ->addAttributeToSelect('*')
             ->addFieldToFilter('entity_id', $ids);
         foreach ($categories as $category){
-            $name = $category->getName();
-            $url = $category->getUrl();
+            array_push($cat,[
+                "id" => $category->getId(),
+                "name" => $category->getName()
+            ]);
         }
-        return $categories;
+        return $cat;
     }
 
     public function converData()
@@ -245,6 +240,10 @@ class Connection extends ApisearchClient {
                             $isInStock = $product->isAvailable();
                             $data[$index][$code] = $isInStock ? 1 : 0;
                             break;
+                        } if ($code == 'categories'){
+                            $categoriesIds = $product->getCategoryIds();
+                            $data[$index][$code] = $this->getCategoriesData($categoriesIds);
+                            break;
                         } else {
                             $filterableValue = $attr->getFrontend()->getValue($child);
                             if ($filterableValue) {
@@ -325,10 +324,10 @@ class Connection extends ApisearchClient {
         $id = $product->getId();
         $name = $product->getName();
         // Solo Marvimundo
-        //$attr = $product->getResource()->getAttribute('marca')->getFrontend()->getValue($product);
-        //$marca = is_object($attr) ? $attr->getText() : $attr;
-        //$attr = $product->getResource()->getAttribute('submarca')->getFrontend()->getValue($product);
-        //$subMarca = is_object($attr) ? $attr->getText() : $attr;
+        $attr = $product->getResource()->getAttribute('marca')->getFrontend()->getValue($product);
+        $marca = is_object($attr) ? $attr->getText() : $attr;
+        $attr = $product->getResource()->getAttribute('submarca')->getFrontend()->getValue($product);
+        $subMarca = is_object($attr) ? $attr->getText() : $attr;
         $productData = array(
             "uuid" => [
                 "type"=> "product",
@@ -339,9 +338,7 @@ class Connection extends ApisearchClient {
             "searchable_metadata" => $data['searchable_metadata'],
             "exact_matching_metadata" => $data['exact_matching_metadata'],
             "suggest" => [
-                $name,
-                //$marca,
-                //$subMarca
+                $name
             ]
         );
         $this->putItem($productData);

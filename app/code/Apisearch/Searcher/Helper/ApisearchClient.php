@@ -313,7 +313,7 @@ class ApisearchClient
             $data = json_encode($body);
             $context = stream_context_create([
                 'http' => [
-                    'method' => $method,
+                    'method' => strtoupper($method),
                     'ignore_errors' => true,
                     'header' => "Content-type: application/json\r\n".
                         "Accept: application/json\r\n".
