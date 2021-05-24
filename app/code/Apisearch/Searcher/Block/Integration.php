@@ -42,9 +42,9 @@ class Integration extends \Magento\Framework\View\Element\AbstractBlock
         $script =
             "<script type='application/javascript'>
     let user_session = '{$sessionID}';
-    let as_snippet ='//pre.apisearch.cloud/{$indexId}.iframe.min.js?language=es';
+    let as_snippet ='//pre.apisearch.cloud/{$indexId}.iframe.min.js?language=es'; //?language=es;
     (function(d,t){var f=d.createElement(t),s=d.getElementsByTagName(t)[0];
-    f.src=(('https:'===location.protocol)?'https:':'http:')+as_snippet;
+    f.src='https://static.apisearch.cloud/{$indexId}.iframe.min.js?';
     f.setAttribute('charset','utf-8');
     s.parentNode.insertBefore(f,s)}(document,'script'));
 

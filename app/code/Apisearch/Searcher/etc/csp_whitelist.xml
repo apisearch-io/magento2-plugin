@@ -4,26 +4,22 @@
     <policies>
         <policy id="connect-src">
             <values>
-                <value id="jsdelivr" type="host">*.cdn.jsdelivr.net</value>
-                <value id="apisearch" type="host">*.apisearch.io</value>
+                <value id="apisearch" type="host">*.apisearch.cloud</value>
             </values>
         </policy>
         <policy id="img-src">
             <values>
-                <value id="jsdelivr" type="host">*.cdn.jsdelivr.net</value>
-                <value id="apisearch" type="host">*.apisearch.io</value>
+                <value id="apisearch" type="host">*.apisearch.cloud</value>
             </values>
         </policy>
         <policy id="script-src">
             <values>
-                <value id="jsdelivr" type="host">*.cdn.jsdelivr.net</value>
-                <value id="apisearch" type="host">*.apisearch.io</value>
+                <value id="apisearch" type="host">*.apisearch.cloud</value>
             </values>
         </policy>
         <policy id="frame-src">
             <values>
-                <value id="jsdelivr" type="host">*.cdn.jsdelivr.net</value>
-                <value id="apisearch" type="host">*.apisearch.io</value>
+                <value id="apisearch" type="host">*.apisearch.cloud</value>
             </values>
         </policy>
     </policies>
