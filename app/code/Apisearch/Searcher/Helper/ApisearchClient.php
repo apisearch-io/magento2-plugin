@@ -322,7 +322,6 @@ class ApisearchClient
                     'content' => $data,
                 ],
             ]);
-
             $data = file_get_contents($url, false, $context);
         } else {
             $data = file_get_contents($url);

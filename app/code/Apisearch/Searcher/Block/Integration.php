@@ -42,7 +42,6 @@ class Integration extends \Magento\Framework\View\Element\AbstractBlock
         $script =
             "<script type='application/javascript'>
     let user_session = '{$sessionID}';
-    let as_snippet ='//pre.apisearch.cloud/{$indexId}.iframe.min.js?language=es'; //?language=es;
     (function(d,t){var f=d.createElement(t),s=d.getElementsByTagName(t)[0];
     f.src='https://static.apisearch.cloud/{$indexId}.iframe.min.js?';
     f.setAttribute('charset','utf-8');

@@ -38,9 +38,12 @@ class DeleteProduct implements ObserverInterface{
             $id = $product->getId();
             $this->_logger->info("Event::Delete product");
             try {
-                $this->_connection->connection();
-                $this->_connection->deleteProduct($id);
-                $this->_logger->info("Success::Delete product::ID".$id);
+                $stores = $this->_connection->getStoresIds();
+                foreach ($stores as $store) {
+                    $this->_connection->connection($store->getId());
+                    $this->_connection->deleteProduct($id);
+                    $this->_logger->info("Success::Delete product::ID".$id);
+                }
             }catch (\Exception $e){
                 $this->_logger->info("Error::Delete product::ID".$id);
                 throw new \Exception($e->getMessage());

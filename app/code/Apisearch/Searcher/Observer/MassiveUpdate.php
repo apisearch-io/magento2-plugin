@@ -36,8 +36,12 @@ class MassiveUpdate implements ObserverInterface{
             $this->_logger->info("Event::Massive product upgrades");
             $productIds = $observer->getProductIds();
             try {
-                $this->_connection->updateItems($productIds);
-                $this->_logger->info("Success::Massive product upgrades ids: ".json_encode($productIds));
+                $stores = $this->_connection->getStoresIds();
+                foreach ($stores as $store) {
+                    $this->_connection->connection($store->getId());
+                    $this->_connection->saveProduct($productIds, $store);
+                    $this->_logger->info("Success::Massive product upgrades ids: ".json_encode($productIds));
+                }
             }catch (\Exception $e) {
                 $this->_logger->info("Error::Massive product");
                 throw new \Exception($e->getMessage());

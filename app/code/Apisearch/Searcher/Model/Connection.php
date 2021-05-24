@@ -73,15 +73,14 @@ class Connection extends ApisearchClient {
         $this->_stockItemRepository = $stockItemRepository;
         $this->_productRepository = $productRepository;
         $this->_categoryFactory = $categoryFactory;
-        $this->connection();
         parent::__construct($this->host,$this->version);
     }
 
-    public function connection()
+    public function connection($store)
     {
-        $appUUID = $this->_dataHelper->getGeneralConfig('appUUID');
-        $indexUUID = $this->_dataHelper->getGeneralConfig('index_id');
-        $tokenUUID = $this->_dataHelper->getGeneralConfig('tokenUUID');
+        $appUUID = $this->_dataHelper->getGeneralConfig('appUUID',$store);
+        $indexUUID = $this->_dataHelper->getGeneralConfig('index_id',$store);
+        $tokenUUID = $this->_dataHelper->getGeneralConfig('tokenUUID',$store);
         $this->setCredentials($appUUID,$indexUUID,$tokenUUID);
     }
 
@@ -323,11 +322,6 @@ class Connection extends ApisearchClient {
     public function productDataPush (Product $product, $data, $event){
         $id = $product->getId();
         $name = $product->getName();
-        // Solo Marvimundo
-        $attr = $product->getResource()->getAttribute('marca')->getFrontend()->getValue($product);
-        $marca = is_object($attr) ? $attr->getText() : $attr;
-        $attr = $product->getResource()->getAttribute('submarca')->getFrontend()->getValue($product);
-        $subMarca = is_object($attr) ? $attr->getText() : $attr;
         $productData = array(
             "uuid" => [
                 "type"=> "product",
@@ -366,15 +360,24 @@ class Connection extends ApisearchClient {
         }
     }
 
-    public function fullUpdate()
+    public function fullUpdate($store_id)
     {
         $collection = $this->_collectionFactory->create();
-        $collection->addAttributeToSelect('*')->addFinalPrice();
+        $collection->addAttributeToSelect('*')->addStoreFilter($store_id)->addFinalPrice();
         $collection->addAttributeToFilter('status', ['in' => Status::STATUS_ENABLED]);
         foreach ($collection as $item) {
-            $this->updateItem($item,'indexer');
+            $this->updateItem($item, 'indexer');
         }
         $this->flush(100,false);
+    }
+    public function saveProduct($ids, $store_id)
+    {
+        $collection = $this->_collectionFactory->create();
+        $collection->addAttributeToSelect('*')->addStoreFilter($store_id)->addFinalPrice();
+        $collection->addAttributeToFilter('entity_id', ['in' => $ids]);
+        foreach ($collection as $item) {
+            $this->updateItem($item);
+        }
     }
 
     public function deleteProduct($id)
@@ -396,5 +399,9 @@ class Connection extends ApisearchClient {
     public function getProduct($productId)
     {
         return $product = $this->_productRepository->getById($productId);
+    }
+
+    public function getStoresIds() {
+        return $this->_storeManager->getStores();
     }
 }

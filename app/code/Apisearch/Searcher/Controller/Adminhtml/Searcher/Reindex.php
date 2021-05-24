@@ -50,7 +50,11 @@ class Reindex extends Action
     {
         try {
             $this->_logger->info('execute reindex CONFIG...');
-            $this->_connection->fullUpdate();
+            $stores = $this->_connection->getStoresIds();
+            foreach ($stores as $store) {
+                $this->_connection->connection($store->getId());
+                $this->_connection->fullUpdate($store->getId());
+            }
         } catch (\Exception $e) {
             $this->_logger->err($e);
         }
