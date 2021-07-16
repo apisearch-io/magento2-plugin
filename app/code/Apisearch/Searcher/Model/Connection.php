@@ -106,15 +106,18 @@ class Connection extends ApisearchClient {
     public function getCategoriesData($ids)
     {
         $cat = array();
-        $categories = $this->_categoryFactory->create()
-            ->addAttributeToSelect('*')
-            ->addFieldToFilter('entity_id', $ids);
-        foreach ($categories as $category){
-            array_push($cat,[
-                "id" => $category->getId(),
-                "name" => $category->getName()
-            ]);
+        if ($ids) {
+            $categories = $this->_categoryFactory->create()
+                ->addAttributeToSelect('*')
+                ->addFieldToFilter('entity_id', $ids);
+            foreach ($categories as $category){
+                array_push($cat,[
+                    "id" => $category->getId(),
+                    "name" => $category->getName()
+                ]);
+            }
         }
+
         return $cat;
     }
 
