@@ -49,7 +49,11 @@ class Feed implements \Magento\Framework\Indexer\ActionInterface, \Magento\Frame
     public function executeFull()
     {
         $this->_logger->info('execute reindex EXECUTE__FULL...');
-        $this->_connection->fullUpdate();
+        $stores = $this->_storeManager->getStores();
+        foreach ($stores as $store) {
+            $this->_connection->connection($store->getId());
+            $this->_connection->fullUpdate($store->getId());
+        }
     }
 
 

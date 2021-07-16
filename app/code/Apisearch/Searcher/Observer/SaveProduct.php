@@ -36,8 +36,12 @@ class SaveProduct implements ObserverInterface{
             $this->_logger->info("Event::save_product_event");
             $product = $observer->getProduct();
             try {
-                $this->_connection->updateItem($product);
-                $this->_logger->info("Success::Saved product id ".$product->getId());
+                $stores = $this->_connection->getStoresIds();
+                foreach ($stores as $store) {
+                    $this->_connection->connection($store->getId());
+                    $this->_connection->saveProduct([$product->getId()],$store);
+                    $this->_logger->info("Success::Saved product id ".$product->getId());
+                }
             }catch (\Exception $e){
                 $this->_logger->info("Error::Saved product id ".$product->getId());
                 throw new \Exception($e->getMessage());
